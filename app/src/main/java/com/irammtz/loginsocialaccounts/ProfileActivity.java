@@ -65,16 +65,22 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         bnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        if (status.isSuccess()){
-                            goLogInScreen();
-                        }else{
-                            Toast.makeText(ProfileActivity.this,"No se pudo cerrar sesion",Toast.LENGTH_SHORT).show();
+                if (!isLoggedIn){
+                    Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            if (status.isSuccess()) {
+                                goLogInScreen();
+                            } else {
+                                Toast.makeText(ProfileActivity.this, "No se pudo cerrar sesion", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    LoginManager.getInstance().logOut();
+                    goLogInScreen();
+
+                }
             }
         });
 
